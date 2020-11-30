@@ -17,6 +17,8 @@ public class Main {
 
     public static void main(String[] args) throws HttpClientErrorException {
 
+
+        //Setting timeout for restTemplate
         var factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(10000);
         factory.setReadTimeout(10000);
@@ -27,8 +29,12 @@ public class Main {
         String url = "http://localhost:8080/";
         ResponseEntity<List> responseEntity;
 
+
+        //Loop for Ordering
+        //Each step is in a loop itself, HttpClientErrorException gets thrown if selection is invalid
         while (true) {
             try {
+                //Getting HandleBarTypes and selecting
                 responseEntity = restTemplate.getForEntity(URI.create(url + "getAvailableHandlebarTypes"), List.class);
                 while (true) {
                     printDescription("HandlebarType", responseEntity);
@@ -40,6 +46,7 @@ public class Main {
                         System.out.println(e.getMessage());
                     }
                 }
+                //Getting Material and selecting
                 while (true) {
                     printDescription("Material", responseEntity);
                     selection[1] = in.nextLine();
@@ -51,6 +58,7 @@ public class Main {
                         System.out.println(e.getMessage());
                     }
                 }
+                //Getting GearShift and selecting
                 while (true) {
                     printDescription("GearShift", responseEntity);
                     selection[2] = in.nextLine();
@@ -62,6 +70,7 @@ public class Main {
                         System.out.println(e.getMessage());
                     }
                 }
+                //Getting HandleMaterial and selecting
                 while (true) {
                     printDescription("HandleMaterial", responseEntity);
                     selection[3] = in.nextLine();
@@ -72,11 +81,13 @@ public class Main {
                         System.out.println(e.getMessage());
                     }
                 }
+                //Setting name
                 System.out.println();
                 System.out.println("Please type in your name:");
                 System.out.println("input> ");
                 selection[4] = in.nextLine();
 
+                //Posting order
                 try {
                     OrderReport orderReport = restTemplate.postForObject(url + "order", selection, OrderReport.class);
                     System.out.println();
@@ -84,7 +95,6 @@ public class Main {
                 } catch (HttpClientErrorException e) {
                     System.out.println(e.getMessage());
                 }
-
             } catch (ResourceAccessException e) {
                 System.out.println("Request took longer than 10 seconds: " + e.getMessage());
             } catch (HttpServerErrorException e) {
