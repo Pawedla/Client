@@ -4,6 +4,7 @@ import com.github.Pawedla.OrderReport;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
@@ -86,6 +87,8 @@ public class Main {
 
             } catch (ResourceAccessException e) {
                 System.out.println("Request took longer than 10 seconds: " + e.getMessage());
+            } catch (HttpServerErrorException e) {
+                System.out.println("Something went wrong: " + e.getMessage());
             }
 
             String continueOrdering = "";
